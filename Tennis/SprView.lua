@@ -396,5 +396,5 @@ while true do
 	lastInput = uiInput
 
 	-- end
-	FCEU.frameadvance();
+	emu.frameadvance();
 end
