@@ -168,30 +168,33 @@ local asciiToController = {
 	["~"] = hexToController(0x7E),
 }
 
-local messageDone = false
-local testMessage = "Hello World!"
+local message = nil
+local messages = {"Hello World!"}
+
+-- Wait some frames before sending some data
+for i=100, 1, -1 do
+    emu.frameadvance()
+end
 
 while true do
-	local counter = 1 -- start at beginning of the string
-	while not messageDone do
-		-- check for string transmission finish
-		if counter == #testMessage then
-			messageDone = true
-		end
+    message = table.remove(messages, 1)
 
-		-- send character
-		local controls = asciiToController[string.sub(testMessage,counter,counter)]
-		if not controls then
-			-- let go of all buttons
-			controls = {up=false,down=false,left=false,right=false,A=false,B=false,start=false,select=false}
-		end
-		joypad.set(2,controls)
+    if message ~= nil then
+        joypad.set(2, hexToController(0xE8)) --RESET
+        emu.frameadvance()
 
-		counter = counter + 1
-		-- need to frame advance, otherwise only the last character is printed
-		emu.frameadvance();
-	end
+        -- send character
+        for c in message:gmatch"." do
+            local controls = asciiToController[c]
+            joypad.set(2,controls)
 
-	-- return to our regularly scheduled programming
-	emu.frameadvance();
+            -- need to frame advance, otherwise only the last character is printed
+            emu.frameadvance()
+        end
+    end
+
+    -- let go of all buttons
+    joypad.set(2, hexToController(0x00))
+    -- return to our regularly scheduled programming
+    emu.frameadvance()
 end
