@@ -15,6 +15,8 @@ Labels = {
 	Upgrade_Tire = 0x0453,
 	Upgrade_Accel = 0x0454,
 	Upgrade_Engine = 0x0455,
+	CurAmmo = 0x0459,
+	NumContinues = 0x045B,
 	Checkpoint_Red = 0x053C,
 	Checkpoint_Green = 0x053D,
 	Checkpoint_Orange = 0x053E,
@@ -35,10 +37,16 @@ Labels = {
 	MaxSpeed_Green = 0x0605,
 	MaxSpeed_Orange = 0x0606,
 	MaxSpeed_Blue = 0x0607,
+	OrangeCarIsMad = 0x061A,
 }
 
 local function DrawOrangeCarCounter()
-	gui.text(198,169,string.format("DANGER: %02d",memory.readbyte(Labels.OrangeCarCounter)),"P26","P0F")
+	local orangeCarCount = memory.readbyte(Labels.OrangeCarCounter)
+	if memory.readbyte(Labels.OrangeCarIsMad) > 0 then
+		gui.text(168,169,"ORANGE CAR MAD","P26","P0F")
+	else
+		gui.text(198,169,string.format("DANGER: %02d",orangeCarCount),"P26","P0F")
+	end
 end
 
 local function DrawLapInfo_HUD()
