@@ -35,4 +35,5 @@ The speedometer now shows the current and maximum speeds for each car.
 To-Do
 =====
 * Show the number of continues on the continue screen
+* Show player upgrade status
 * Other things???
